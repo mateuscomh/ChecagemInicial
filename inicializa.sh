@@ -48,17 +48,7 @@ verde="\033[0;32m"
 negrito="\033[;1m"
 azul="\033[1;94m"
 
-echo -e "ATENÇÃO!!!
-VALIDAÇÃO INICIAL DE SISTEMA PADRONIZADA:
-NÃO IMPLICA NA OBSERVANCIA USUAL DAS DEMAIS APLICAÇÕES E TESTES.
- ____  _   ___  __
-/ ___|| \ | \ \/ /
-\___ \|  \| |\  / 
- ___) | |\  |/  \ 
-|____/|_| \_/_/\_\\
-"
-#adicionar case no inicio do script ao inves de if
-#https://www.dicas-l.com.br/arquivo/case_em_bash.php
+#validar a possibilidade de reduzir ifs com case
 
 if [ $ENABLESCRIPT -eq 0 ]; then
     echo "exiting"
@@ -194,7 +184,7 @@ check_db(){
 }
 
 check_automacao(){
-    
+#em andamento    
 }
 
 
