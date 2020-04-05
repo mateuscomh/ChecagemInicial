@@ -24,10 +24,8 @@
 
 ######################
 # Verificar SERVICOS #
-#                    #          
 # Verificar = 1      #
 # Não verificar = 0  #
-#                    #
 ######################
 
 ENABLESCRIPT=1
