@@ -1,4 +1,4 @@
-# CheckInicializa
+ Checagem inicializacao
 
 #============================================================================================
        ARQUIVO:  CheckinInicial.sh
