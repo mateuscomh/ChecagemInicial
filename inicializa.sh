@@ -17,7 +17,7 @@
 #       05/04/2020 10:00
 #       - Implementado validação do status do asterisk caso houver no servidor
 #       - Adicionada função de validação de swap e memória livre/em uso
-#
+#       - Adicionadas condições de case e ajustes em tests if
 #=============================================================================================
 
 
@@ -29,7 +29,7 @@
 ######################
 
 ENABLESCRIPT=1
-SYSTEM=1
+SYSTEM=0
 ASTERISK=0
 POSTGRESQL=0
 AUTOMACAO=0 #pendente
@@ -37,6 +37,8 @@ AUTOMACAO=0 #pendente
 
 #VARIAVEIS
 particao="/dev/mapper/fedora_localhost--live-root" 
+#Informar o caminho da distribuição a qual for utilizar
+#Validado inicialmente no fedora 30, para o centos6 o caminho vai mudar
 
 #CORES
 padrao="\033[0;0m"
@@ -54,17 +56,16 @@ if [[ "$ENABLESCRIPT" -eq "0" ]]; then
 fi
 
 check_system(){
-
-    #Monitorar memoria e swap
-
-    if [[ "$SYSTEM" -eq "1" ]]; then
-        #SISTEMA OPERACIONAL
+    case $SYSTEM in 
+    0)
+    ;;
+    1)  #SISTEMA OPERACIONAL
         echo -e "VERSAO DE SISTEMA $azul$(cat /etc/os-release | grep -i pretty |  cut -d "=" -f2)""$padrao"
         #HORARIO
         echo -e "UTC:           $negrito$(date '+%Z  %d/%m/%Y  %H:%M:%S')""$padrao"
         #UPTIME
         uptime=$(uptime | awk '{print$3,$4}' |sed 's/,//g')
-        echo -e "UPTIME DE SISTEMA :         $negrito$uptime ""$padrao" 
+        echo -e "UPTIME DE SISTEMA :         $negrito$uptime ""$padrao users" 
 
         #DISCO
         percentdisco=$(df -h "$particao" |sed -n '2p' | awk '{print $5}'| grep -v Use |sed 's/%//g')
@@ -84,11 +85,11 @@ check_system(){
         #IO wait
         wa=`top -bin 1 | grep '%wa'| awk '{print $6}' | sed 's/\%wa,//'`
         if [[ -z "$wa" ]]; then
-            wa=`top -bin 1 | grep ' wa'| awk '{print $10}'`
+            wa=$(top -bin 1 | grep ' wa'| awk '{print $10}')
             #Multiplo de 10 para comparação de inteiros
-            wa10=`echo $wa | sed 's/\,//'`
+            wa10=$(echo $wa | sed 's/\,//')
         else
-            wa10=`echo $wa | sed 's/\%wa,//' | sed 's/\.//'`
+            wa10=$(echo $wa | sed 's/\%wa,//' | sed 's/\.//')
         fi
         if [[ "$wa10" -le "20" ]]; then
             echo -e "IOWAIT (wa)           : $verde$wa""$padrao"
@@ -99,10 +100,10 @@ check_system(){
         fi
 
         #CPU
-        threads=`nproc`
-        load=`cat /proc/loadavg | cut -d ' ' -f 1`
+        threads=$(nproc)
+        load=$(cat /proc/loadavg | cut -d ' ' -f 1)
         #Multiplo de 100 para comparar somente inteiros
-        load100=`cat /proc/loadavg | cut -d ' ' -f 1| sed 's/\.//'`
+        load100=$(cat /proc/loadavg | cut -d ' ' -f 1| sed 's/\.//')
         if [[ "$load100" -le "$(($threads*50))" ]]; then
         #Ajuste de formatação da quantidade de threads quando tem 1 digito
             if [[ "$threads" -le "9" ]]; then
@@ -150,12 +151,17 @@ check_system(){
             elif [[ "$percentmem" -ge "51" ]]; then
                 echo -e "SWAP EM USO $negrito$usadaswap MB $vermeho$percentswap%""$padrao"
             fi
-    fi
+    ;;
+    *) echo -e "Opção desconhecida no script nas variáveis em SYSTEM. Utilize expressões 0 para desabilitar ou 1 para habilitar"
+    ;;
+    esac
 }
 
 check_asterisk(){
-    if [[ "$ASTERISK" = "1" ]]; then
-        if [[ -d "/etc/asterisk/" ]]; then
+    case $ASTERISK in 
+    0) 
+    ;;
+    1)  if [[ -d "/etc/asterisk/" ]]; then
             if ps ax | grep -v grep | grep asterisk > /dev/null; then
                 echo -e "$verde Asterisk Executando!""$padrao"
             else
@@ -164,11 +170,16 @@ check_asterisk(){
         else
             echo -e "$amarelo Serviço Asterisk não localizado!!""$padrao"
         fi
-    fi
+    ;;
+    *) echo -e "Opção desconhecida no script nas variáveis em SYSTEM. Utilize expressões 0 para desabilitar ou 1 para habilitar"
+    ;;
+    esac
 }
 check_db(){
-    if [[ "$POSTGRESQL" -eq 1 ]]; then
-        if [ -d "/etc/postgresql/" ]; then
+    case $POSTGRESQL in
+    0)
+    ;;
+    1) if [ -d "/etc/postgresql/" ]; then
                 if ps ax | grep -v grep | grep postgresql > /dev/null; then
                 
                         echo -e "$verde postgreSQL Executando!""$padrao"
@@ -178,12 +189,15 @@ check_db(){
         else
             echo -e "$amarelo Serviço PostgreSQL não localizado!!""$padrao"
         fi
-    fi
+    ;;
+    *) echo -e "Opção desconhecida no script nas variáveis em SYSTEM. Utilize expressões 0 para desabilitar ou 1 para habilitar"
+    ;;
+    esac
 }
 
-check_automacao(){
+#check_automacao(){
 #em andamento    
-}
+#}
 
 
 ###########
