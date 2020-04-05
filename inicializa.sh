@@ -60,7 +60,7 @@ check_system(){
 
     if [ $SYSTEM -eq 1 ]; then
         #SISTEMA OPERACIONAL
-        echo -e "VERSAO DE SISTEMA $azul$(cat /etc/os-release | grep -i pretty | cut -c13-45)""$padrao"
+        echo -e "VERSAO DE SISTEMA $azul$(cat /etc/os-release | grep -i pretty |  cut -d "=" -f2)""$padrao"
         #HORARIO
         echo -e "UTC:           $negrito$(date '+%Z  %Y/%m/%d  %H:%M:%S')""$padrao"
         #UPTIME
