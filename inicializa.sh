@@ -50,7 +50,7 @@ azul="\033[1;94m"
 
 #validar a possibilidade de reduzir ifs com case
 
-if [ $ENABLESCRIPT -eq 0 ]; then
+if [[ "$ENABLESCRIPT" -eq "0" ]]; then
     echo "exiting"
     exit 0
 fi
@@ -59,7 +59,7 @@ check_system(){
 
     #Monitorar memoria e swap
 
-    if [ $SYSTEM -eq 1 ]; then
+    if [[ "$SYSTEM" -eq "1" ]]; then
         #SISTEMA OPERACIONAL
         echo -e "VERSAO DE SISTEMA $azul$(cat /etc/os-release | grep -i pretty |  cut -d "=" -f2)""$padrao"
         #HORARIO
@@ -75,7 +75,7 @@ check_system(){
         if [[ -z "$percentdisco" ]]; then
                 percentdisco=$(df -h $particao |sed -n '3p' | awk '{print $4}'| grep -v Use |sed 's/%//g')
         fi
-        if [[ "$percentdisco" -le 50 ]]; then
+        if [[ "$percentdisco" -le "50" ]]; then
                 echo -e "ESPAÇO UTILIZADO EM /: TOTAL:$verde$totaldisco$padrao USADO:$verde$usadodisco $percentdisco%""$padrao EM USO"
         elif [[ "$percentdisco" -ge "51" ]] && [ $percentdisco -le 74 ]; then
                 echo -e "ESPAÇO UTILIZADO EM /: TOTAL:$amarelo$totaldisco$padrao USADO:$amarelo$usadodisco = $amarelo$percentdisco%""$padrao EM USO"
@@ -85,7 +85,7 @@ check_system(){
 
         #IO wait
         wa=`top -bin 1 | grep '%wa'| awk '{print $6}' | sed 's/\%wa,//'`
-        if [ -z $wa ]; then
+        if [[ -z "$wa" ]]; then
             wa=`top -bin 1 | grep ' wa'| awk '{print $10}'`
             #Multiplo de 10 para comparação de inteiros
             wa10=`echo $wa | sed 's/\,//'`
