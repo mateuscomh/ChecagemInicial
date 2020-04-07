@@ -1,5 +1,6 @@
 #!/bin/bash
-
+echo"
+============================================================================================"
 #============================================================================================
 #       ARQUIVO:  CheckinInicial.sh
 #       DESCRICAO: Script com a finalidade de checagem prévia de hardware e serviços em servidores CentOS6
@@ -221,7 +222,7 @@ check_system
 check_db
 #check_automacao
 check_asterisk
-
+echo "============================================================================================"
 #Se colocar no etc/profile, exit0 não pode conter no script
 #exit 0
         
