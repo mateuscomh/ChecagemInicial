@@ -54,12 +54,6 @@ azul="\033[1;94m"
 echo -e "ATENÇÃO!!!
 ￼VALIDAÇÃO INICIAL DE SISTEMA PADRONIZADA:
 ￼NÃO IMPLICA NA OBSERVANCIA USUAL DAS DEMAIS APLICAÇÕES E TESTES.
-￼ ____  _   ___  __
-￼/ ___|| \ | \ \/ /
-￼\___ \|  \| |\  / 
-￼ ___) | |\  |/  \ 
-￼|____/|_| \_/_/\_\\
-￼"
 
 if [[ "$ENABLESCRIPT" -eq "0" ]]; then
     echo "exiting"
